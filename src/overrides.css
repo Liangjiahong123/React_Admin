@@ -1,0 +1,30 @@
+.ant-form-item-label > label {
+  width: 100px;
+  justify-content: flex-end;
+}
+
+.reset-btn {
+  margin-left: 24px;
+}
+
+.ant-card-body pre {
+  background: rgb(40 4040);
+  color: 口#fff;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.ant-card-body table {
+  border: 1px solid;
+}
+
+.ant-card-body tr,
+.ant-card-body th,
+.ant-card-body td {
+  border: 1px solid;
+  text-align: center;
+}
+
+.ant-card-body img {
+  max-width: 808px;
+}
