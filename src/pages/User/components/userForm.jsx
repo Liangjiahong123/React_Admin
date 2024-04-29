@@ -1,8 +1,10 @@
 import { Radio, Form, Input, Upload, Button } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { useEffect } from "react";
+import { useNavigate } from "@umijs/max";
 
 const UserForm = ({ type, userInfo, setUserInfo, handleSubmit }) => {
+  const navigate = useNavigate();
   const [form] = Form.useForm();
   useEffect(() => {
     form.resetFields();
@@ -15,6 +17,17 @@ const UserForm = ({ type, userInfo, setUserInfo, handleSubmit }) => {
     }
     return e?.fileList;
   };
+
+  const cancelBtn =
+    type === "edit" ? (
+      <Button className="reset-btn" onClick={() => navigate("/user/list")}>
+        返回
+      </Button>
+    ) : (
+      <Button className="reset-btn" onClick={handleResetForm}>
+        重置
+      </Button>
+    );
 
   function handleUpdateInfo(newVal, key) {
     const newuserInfo = { ...userInfo };
@@ -31,7 +44,7 @@ const UserForm = ({ type, userInfo, setUserInfo, handleSubmit }) => {
         }
       }
     }
-    form.setFieldsValue(newuserInfo);
+    form.setFieldsValue(newUserInfo);
   }
 
   return (
@@ -130,7 +143,7 @@ const UserForm = ({ type, userInfo, setUserInfo, handleSubmit }) => {
       <Form.Item label="自我介绍" name="self">
         <Input.TextArea
           placeholder="选填"
-          rows={4}
+          rows={5}
           value={userInfo?.self}
           onChange={(e) => handleUpdateInfo(e.target.value, "self")}
         />
@@ -138,11 +151,9 @@ const UserForm = ({ type, userInfo, setUserInfo, handleSubmit }) => {
       {/* 提交 */}
       <Form.Item wrapperCol={{ offset: 8 }}>
         <Button type="primary" htmlType="submit">
-          确认新增
+          {type === "edit" ? "确认修改" : "确认新增"}
         </Button>
-        <Button className="reset-btn" htmlType="button" onClick={handleResetForm}>
-          重置
-        </Button>
+        {cancelBtn}
       </Form.Item>
     </Form>
   );

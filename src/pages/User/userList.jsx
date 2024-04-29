@@ -1,12 +1,17 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useCallback } from "react";
 import { ProTable, PageContainer } from "@ant-design/pro-components";
 import { Switch, Button, Popconfirm, App } from "antd";
+import { useNavigate } from "@umijs/max";
 import { getUserListApi, editUserApi, deleteUserByIdApi } from "services/user";
+import UserDetailModal from "./components/userDetailModal";
 
 const UserList = () => {
   const { message } = App.useApp();
+  const navigate = useNavigate();
   const tableRef = useRef(null);
   const [pageInfo, setPageInfo] = useState({ current: 1, pageSize: 10 });
+  const [modalOpen, setModalOpen] = useState(false);
+  const [currentRow, setCurrentRow] = useState(false);
 
   const columns = [
     {
@@ -75,9 +80,9 @@ const UserList = () => {
         return (
           <div key={row.id}>
             <Button type="link" size="small" onClick={() => handleOpenDetailModal(row)}>
-              编辑
+              详情
             </Button>
-            <Button type="link" size="small" onClick={() => handleOpenEditModal(row)}>
+            <Button type="link" size="small" onClick={() => handleNavToEditPage(row)}>
               编辑
             </Button>
             <Popconfirm
@@ -120,11 +125,22 @@ const UserList = () => {
     message.success("修改成功");
   }
 
-  // 打开编辑弹窗
-  function handleOpenEditModal(row) {}
+  // 跳转编辑页面
+  function handleNavToEditPage(row) {
+    navigate(`/user/edit/${row.id}`, { state: row });
+  }
 
   // 打开详情弹窗
-  function handleOpenDetailModal(row) {}
+  function handleOpenDetailModal(row) {
+    setCurrentRow(row);
+    setModalOpen(true);
+  }
+
+  // 关闭详情弹窗
+  function handleCloseDetailModal() {
+    setCurrentRow({});
+    setModalOpen(false);
+  }
 
   // 删除用户
   async function handleDeleteConfirm(row) {
@@ -154,6 +170,7 @@ const UserList = () => {
         headerTitle="用户列表"
         request={getUserListQuery}
       />
+      <UserDetailModal modalOpen={modalOpen} row={currentRow} onClose={handleCloseDetailModal} />
     </PageContainer>
   );
 };
