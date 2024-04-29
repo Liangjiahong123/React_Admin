@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "@umijs/max";
-import { ProTable } from "@ant-design/pro-components";
+import { ProTable, PageContainer } from "@ant-design/pro-components";
 import { Tag, Switch, Button, Popconfirm, App, Modal } from "antd";
-import { objIsEqual } from "@/utils/valid";
+import { objIsEqual } from "utils/valid";
 import AdminForm from "./components/adminForm";
 
 const AdminList = () => {
@@ -176,8 +176,9 @@ const AdminList = () => {
   }
 
   return (
-    <>
+    <PageContainer>
       <ProTable
+        bordered
         headerTitle="管理员列表"
         options={{ reload: false }}
         dataSource={adminList}
@@ -196,18 +197,14 @@ const AdminList = () => {
 
       <Modal
         title="编辑管理员"
+        destroyOnClose
         open={modalOpen}
         onOk={handleEditOk}
         onCancel={() => setModalOpen(false)}
       >
-        <AdminForm
-          type="edit"
-          adminInfo={editInfo}
-          setAdminInfo={setEditInfo}
-          handleSubmit={handleEditOk}
-        />
+        <AdminForm type="edit" adminInfo={editInfo} setAdminInfo={setEditInfo} />
       </Modal>
-    </>
+    </PageContainer>
   );
 };
 

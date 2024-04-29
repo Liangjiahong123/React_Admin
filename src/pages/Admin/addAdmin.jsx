@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useNavigate } from "@umijs/max";
 import { App } from "antd";
+import { PageContainer } from "@ant-design/pro-components";
 import AdminForm from "./components/adminForm";
 
 const AddAdmin = () => {
@@ -33,12 +34,16 @@ const AddAdmin = () => {
   }
 
   return (
-    <AdminForm
-      type="add"
-      adminInfo={adminInfo}
-      setAdminInfo={setAdminInfo}
-      handleSubmit={handleSubmit}
-    />
+    <PageContainer>
+      <div style={{ maxWidth: "800px" }}>
+        <AdminForm
+          type="add"
+          adminInfo={adminInfo}
+          setAdminInfo={setAdminInfo}
+          handleSubmit={handleSubmit}
+        />
+      </div>
+    </PageContainer>
   );
 };
 

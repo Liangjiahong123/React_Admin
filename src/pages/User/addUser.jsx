@@ -1,7 +1,32 @@
-import React from "react";
+import { useState } from "react";
+import { PageContainer } from "@ant-design/pro-components";
+import UserForm from "./components/userForm";
 
-const addUser = () => {
-  return <div>addUser</div>;
+const AddUser = () => {
+  const [userInfo, setUserInfo] = useState({
+    account: "",
+    password: "",
+    nickName: "",
+    avatar: "",
+    qq: "",
+    wechat: "",
+    gender: 0,
+    enable: 1
+  });
+
+  function handleSubmit() {}
+  return (
+    <PageContainer>
+      <div style={{ maxWidth: "800px" }}>
+        <UserForm
+          type="add"
+          userInfo={userInfo}
+          setUserInfo={setUserInfo}
+          handleSubmit={handleSubmit}
+        />
+      </div>
+    </PageContainer>
+  );
 };
 
-export default addUser;
+export default AddUser;

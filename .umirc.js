@@ -25,7 +25,6 @@ export default defineConfig({
     {
       name: "管理员",
       path: "/admin",
-      component: "./Admin",
       icon: "UserOutlined",
       routes: [
         {
@@ -43,7 +42,6 @@ export default defineConfig({
     {
       name: "用户",
       path: "/user",
-      component: "./User",
       icon: "TeamOutlined",
       routes: [
         {
@@ -55,6 +53,12 @@ export default defineConfig({
           name: "添加用户",
           path: "add",
           component: "./User/addUser"
+        },
+        {
+          name: "编辑用户",
+          path: "edit/:id",
+          component: "./User/editUser",
+          hideInMenu: true
         }
       ]
     },
@@ -104,7 +108,8 @@ export default defineConfig({
   alias: {
     utils: resolve(__dirname, "./src/utils"),
     components: resolve(__dirname, "./src/components"),
-    assets: resolve(__dirname, "./src/assets")
+    assets: resolve(__dirname, "./src/assets"),
+    services: resolve(__dirname, "./src/services")
   },
 
   npmClient: "pnpm"
