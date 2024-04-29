@@ -1,5 +1,6 @@
 import Mock from "mockjs";
 import { omit } from "../src/utils/property";
+import { generateRandomColor, resSuccess, resError } from "../src/utils/tools";
 
 const adminList = Mock.mock({
   "list|50": [
@@ -13,9 +14,21 @@ const adminList = Mock.mock({
       "gender|0-1": 0,
       "role|1-3": 1,
       "enable|0-1": 0
+    },
+    {
+      id: 51,
+      account: "admin",
+      password: "123456",
+      username: "Jimmy",
+      nickName: "Jimmy",
+      gender: 0,
+      role: 1,
+      enable: 1
     }
   ]
 });
+
+let captchaText = "";
 
 export default {
   "GET /api/admin": (req, res) => {
@@ -35,20 +48,13 @@ export default {
       .slice((page - 1) * size, page * size)
       .map((admin) => omit(admin, "password"));
 
-    res.json({
-      success: true,
-      data: { list, total: responseList.length },
-      errorCode: 0
-    });
+    resSuccess(res, { list, total: responseList.length });
   },
   "DELETE /api/admin/:id": (req, res) => {
     const { id } = req.params;
     const delIndex = adminList.list.findIndex((admin) => admin.id === +id);
     adminList.list.splice(delIndex, 1);
-    res.json({
-      success: true,
-      errorCode: 0
-    });
+    resSuccess(res, null);
   },
   "PATCH /api/admin/:id": (req, res) => {
     const { id: adminId } = req.params;
@@ -66,15 +72,12 @@ export default {
       }
     }
 
-    res.json({
-      success: true,
-      errorCode: 0
-    });
+    resSuccess(res, null);
   },
   "POST /api/admin": (req, res) => {
     const newAdminInfo = req.body;
     const isExist = adminList.list.some((admin) => admin.account === newAdminInfo.account);
-    if (isExist) return res.json({ success: false, errorCode: -1, errMsg: "管理员已存在" });
+    if (isExist) return resError(res, "管理员已存在");
 
     const newId = adminList.list[adminList.list.length - 1].id + 1;
     adminList.list.push({
@@ -86,10 +89,26 @@ export default {
       username: newAdminInfo.username || Mock.Random.cname(),
       nickName: newAdminInfo.nickName || Mock.Random.last()
     });
-    res.json({
-      success: true,
-      errorCode: 0,
-      data: newAdminInfo
+    resSuccess(res, newAdminInfo);
+  },
+  "GET /api/captcha": (req, res) => {
+    captchaText = Mock.mock({ regexp: /\w{4}/ }).regexp;
+    const cptchaImg = Mock.mock({
+      img: Mock.Random.image("100x32", generateRandomColor(), "#fff", captchaText),
+      text: captchaText
+    });
+    resSuccess(res, cptchaImg);
+  },
+  "POST /api/login": (req, res) => {
+    const { account, password, captcha } = req.body;
+    const targetAdmin = adminList.list.find((admin) => admin.account === account);
+    if (!targetAdmin) return resError(res, "账号不存在");
+    if (targetAdmin.password !== password) return resError(res, "密码错误");
+    if (captcha !== captchaText) return resError(res, "验证码错误");
+    if (!targetAdmin.enable) return resError(res, "账号已被禁用");
+
+    resSuccess(res, {
+      token: Mock.Random.guid()
     });
   }
 };

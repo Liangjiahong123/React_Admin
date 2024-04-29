@@ -26,3 +26,13 @@ export function editAdminsApi(id, newAdminInfo) {
 export function addAdminApi(newAdminInfo) {
   return request("/api/admin", { method: "POST", data: newAdminInfo });
 }
+
+// 获取验证码
+export function getCaptchaApi() {
+  return request("/api/captcha", { method: "GET" });
+}
+
+// 登录
+export function loginApi(loginInfo) {
+  return request("/api/login", { method: "POST", data: loginInfo });
+}

@@ -1,10 +1,17 @@
-import { getAdminListApi, deleteAdminByIdApi, editAdminsApi, addAdminApi } from "@/services/admin";
+import {
+  getAdminListApi,
+  deleteAdminByIdApi,
+  editAdminsApi,
+  addAdminApi,
+  loginApi
+} from "@/services/admin";
 
 export default {
   namespace: "admin",
   state: {
     adminList: [],
-    adminTotal: 0
+    adminTotal: 0,
+    token: localStorage.getItem("token") || ""
   },
   reducers: {
     setAdminList(state, { payload }) {
@@ -40,6 +47,11 @@ export default {
       const newAdminList = [...state.adminList];
       newAdminList.push(payload);
       return { ...state, adminList: newAdminList };
+    },
+
+    setToken(state, { payload }) {
+      localStorage.setItem("token", payload);
+      return { ...state, token: payload };
     }
   },
   effects: {
@@ -80,6 +92,15 @@ export default {
       const result = yield call(addAdminApi, payload);
       if (result.errorCode !== 0) return result;
       yield put({ type: "addAdmin", payload });
+      return result;
+    },
+
+    // 登录
+    *fetchLogin({ payload }, { call, put }) {
+      const result = yield call(loginApi, payload);
+      if (result.errorCode === 0) {
+        yield put({ type: "setToken", payload: result?.data?.token || "" });
+      }
       return result;
     }
   }
