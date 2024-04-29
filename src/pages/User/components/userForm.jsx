@@ -7,7 +7,6 @@ const UserForm = ({ type, userInfo, setUserInfo, handleSubmit }) => {
   const navigate = useNavigate();
   const [form] = Form.useForm();
   useEffect(() => {
-    form.resetFields();
     form.setFieldsValue(userInfo);
   }, [form]);
 
@@ -39,7 +38,7 @@ const UserForm = ({ type, userInfo, setUserInfo, handleSubmit }) => {
     const newUserInfo = { ...userInfo };
     for (const key in newUserInfo) {
       if (newUserInfo.hasOwnProperty(key)) {
-        if (["account", "password", "nickName", "avatar"].includes(key)) {
+        if (["account", "password", "nickName", "avatar", "qq", "wechat", "self"].includes(key)) {
           newUserInfo[key] = "";
         }
       }
@@ -98,7 +97,6 @@ const UserForm = ({ type, userInfo, setUserInfo, handleSubmit }) => {
           <Radio value={1}>女</Radio>
         </Radio.Group>
       </Form.Item>
-
       {/* 头像 */}
       <Form.Item
         label="上传头像"

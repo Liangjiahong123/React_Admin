@@ -2,29 +2,29 @@ import { useState } from "react";
 import { App } from "antd";
 import { useNavigate, useParams, useLocation } from "@umijs/max";
 import { PageContainer } from "@ant-design/pro-components";
-import UserForm from "./components/userForm";
-import { editUserApi } from "services/user";
+import { editBookApi } from "services/book";
+import BookForm from "./components/BookForm";
 
-const EditUser = () => {
+const EditBook = () => {
   const params = useParams();
   const location = useLocation();
   const { message } = App.useApp();
   const navigate = useNavigate();
-  const [userInfo, setUserInfo] = useState({ ...location.state });
+  const [bookInfo, setBookInfo] = useState({ ...location.state });
 
-  async function handleSubmit() {
-    const { errorCode } = await editUserApi(params.id, userInfo);
+  async function handleSubmit(content) {
+    const { errorCode } = await editBookApi(params.id, { ...bookInfo, desc: content });
     if (errorCode !== 0) return;
     message.success("修改成功");
-    navigate("/user/list");
+    navigate("/books/list");
   }
   return (
     <PageContainer>
-      <div style={{ maxWidth: "800px" }}>
-        <UserForm
+      <div style={{ maxWidth: "1000px" }}>
+        <BookForm
           type="edit"
-          userInfo={userInfo}
-          setUserInfo={setUserInfo}
+          bookInfo={bookInfo}
+          setBookInfo={setBookInfo}
           handleSubmit={handleSubmit}
         />
       </div>
@@ -32,4 +32,4 @@ const EditUser = () => {
   );
 };
 
-export default EditUser;
+export default EditBook;

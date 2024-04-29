@@ -65,7 +65,6 @@ export default defineConfig({
     {
       name: "书籍",
       path: "/books",
-      component: "./Books",
       icon: "ReadOutlined",
       routes: [
         {
@@ -77,6 +76,12 @@ export default defineConfig({
           name: "添加书籍",
           path: "add",
           component: "./Books/addBook"
+        },
+        {
+          name: "编辑书籍",
+          path: "edit/:id",
+          component: "./Books/editBook",
+          hideInMenu: true
         }
       ]
     },
@@ -103,13 +108,19 @@ export default defineConfig({
       path: "/type",
       component: "./Type",
       icon: "ProductOutlined"
+    },
+    {
+      path: "/login",
+      component: "./Login",
+      layout: false
     }
   ],
   alias: {
     utils: resolve(__dirname, "./src/utils"),
     components: resolve(__dirname, "./src/components"),
     assets: resolve(__dirname, "./src/assets"),
-    services: resolve(__dirname, "./src/services")
+    services: resolve(__dirname, "./src/services"),
+    constants: resolve(__dirname, "./src/constants")
   },
 
   npmClient: "pnpm"

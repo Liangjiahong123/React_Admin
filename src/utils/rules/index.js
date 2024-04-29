@@ -1,1 +1,0 @@
-export { loginRule } from "./loginRule";

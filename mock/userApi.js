@@ -25,9 +25,9 @@ export default {
     Object.keys(rest).forEach((key) => {
       if (rest[key]) {
         if (["gender", "enable"].includes(key)) {
-          responseList = responseList.filter((admin) => admin[key] === +rest[key]);
+          responseList = responseList.filter((user) => user[key] === +rest[key]);
         } else {
-          responseList = responseList.filter((admin) => admin[key].indexOf(rest[key]) > -1);
+          responseList = responseList.filter((user) => user[key].indexOf(rest[key]) > -1);
         }
       }
     });
@@ -75,7 +75,7 @@ export default {
   "POST /api/user": (req, res) => {
     const newUserInfo = req.body;
     const isExist = userList.list.some((user) => user.account === newUserInfo.account);
-    if (isExist) return res.json({ success: false, errorCode: -1, errMsg: "账号已存在" });
+    if (isExist) return res.json({ success: false, errorCode: -1, errMsg: "用户已存在" });
 
     const newId = userList.list[userList.list.length - 1].id + 1;
     userList.list.push({

@@ -74,7 +74,7 @@ export default {
   "POST /api/admin": (req, res) => {
     const newAdminInfo = req.body;
     const isExist = adminList.list.some((admin) => admin.account === newAdminInfo.account);
-    if (isExist) return res.json({ success: false, errorCode: -1, errMsg: "账号已存在" });
+    if (isExist) return res.json({ success: false, errorCode: -1, errMsg: "管理员已存在" });
 
     const newId = adminList.list[adminList.list.length - 1].id + 1;
     adminList.list.push({
