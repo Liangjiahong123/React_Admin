@@ -10,6 +10,7 @@ const AddUser = () => {
     avatar: "",
     qq: "",
     wechat: "",
+    self: "",
     gender: 0,
     enable: 1
   });

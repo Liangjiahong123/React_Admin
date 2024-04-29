@@ -122,12 +122,19 @@ const UserForm = ({ type, userInfo, setUserInfo, handleSubmit }) => {
         <Input
           placeholder="选填"
           value={userInfo?.wechat}
-          maxLength={10}
-          onChange={(e) => handleUpdateInfo(e.target.value, "qq")}
+          maxLength={16}
+          onChange={(e) => handleUpdateInfo(e.target.value, "wechat")}
         />
       </Form.Item>
       {/* 自我介绍 */}
-
+      <Form.Item label="自我介绍" name="self">
+        <Input.TextArea
+          placeholder="选填"
+          rows={4}
+          value={userInfo?.self}
+          onChange={(e) => handleUpdateInfo(e.target.value, "self")}
+        />
+      </Form.Item>
       {/* 提交 */}
       <Form.Item wrapperCol={{ offset: 8 }}>
         <Button type="primary" htmlType="submit">
