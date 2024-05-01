@@ -1,12 +1,13 @@
 import { useState, useRef } from "react";
 import { ProTable, PageContainer } from "@ant-design/pro-components";
 import { Switch, Button, Popconfirm, App } from "antd";
-import { useNavigate } from "@umijs/max";
+import { useNavigate, useAccess, Access } from "@umijs/max";
 import { getUserListApi, editUserApi, deleteUserByIdApi } from "services/user";
 import UserDetailModal from "./components/userDetailModal";
 
 const UserList = () => {
   const { message } = App.useApp();
+  const access = useAccess();
   const navigate = useNavigate();
   const tableRef = useRef(null);
   const [pageInfo, setPageInfo] = useState({ current: 1, pageSize: 10 });
@@ -85,16 +86,18 @@ const UserList = () => {
             <Button type="link" size="small" onClick={() => handleNavToEditPage(row)}>
               编辑
             </Button>
-            <Popconfirm
-              title="是否确定删除该用户？"
-              onConfirm={() => handleDeleteConfirm(row)}
-              okText="确认"
-              cancelText="取消"
-            >
-              <Button type="link" size="small">
-                删除
-              </Button>
-            </Popconfirm>
+            <Access accessible={access.superAdmin}>
+              <Popconfirm
+                title="是否确定删除该用户？"
+                onConfirm={() => handleDeleteConfirm(row)}
+                okText="确认"
+                cancelText="取消"
+              >
+                <Button type="link" size="small">
+                  删除
+                </Button>
+              </Popconfirm>
+            </Access>
           </div>
         );
       },

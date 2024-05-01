@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "@umijs/max";
+import { useDispatch, useSelector, useModel } from "@umijs/max";
 import { ProTable, PageContainer } from "@ant-design/pro-components";
 import { Tag, Switch, Button, Popconfirm, App, Modal } from "antd";
 import { objIsEqual } from "utils/valid";
@@ -7,6 +7,7 @@ import AdminForm from "./components/adminForm";
 
 const AdminList = () => {
   const dispatch = useDispatch();
+  const { initialState } = useModel("@@initialState");
   const { adminList, adminTotal } = useSelector((state) => state.admin);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchParams, setSearchParams] = useState({});
@@ -92,6 +93,9 @@ const AdminList = () => {
         1: { text: "启用" }
       },
       render: (_, row) => {
+        if (row.id === initialState.adminInfo.id) {
+          return <Tag color="red">-</Tag>;
+        }
         return (
           <Switch
             key={row.id}

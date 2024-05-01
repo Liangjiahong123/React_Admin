@@ -9,23 +9,26 @@ export default defineConfig({
   request: {},
   dva: {},
   layout: {
-    title: "coder station"
+    title: "React+umi"
   },
   routes: [
     {
       path: "/",
-      redirect: "/home"
+      redirect: "/home",
+      access: "normalAdmin"
     },
     {
       name: "首页",
       path: "/home",
       component: "./Home",
-      icon: "HomeOutlined"
+      icon: "HomeOutlined",
+      access: "normalAdmin"
     },
     {
       name: "管理员",
       path: "/admin",
       icon: "UserOutlined",
+      access: "superAdmin",
       routes: [
         {
           name: "管理员列表",
@@ -43,6 +46,7 @@ export default defineConfig({
       name: "用户",
       path: "/user",
       icon: "TeamOutlined",
+      access: "normalAdmin",
       routes: [
         {
           name: "用户列表",
@@ -66,6 +70,7 @@ export default defineConfig({
       name: "书籍",
       path: "/books",
       icon: "ReadOutlined",
+      access: "normalAdmin",
       routes: [
         {
           name: "书籍列表",
@@ -89,25 +94,29 @@ export default defineConfig({
       name: "面试题",
       path: "/interview",
       component: "./Interview",
-      icon: "SignatureOutlined"
+      icon: "SignatureOutlined",
+      access: "normalAdmin"
     },
     {
       name: "问答",
       path: "/issue",
       component: "./Issue",
-      icon: "GlobalOutlined"
+      icon: "GlobalOutlined",
+      access: "normalAdmin"
     },
     {
       name: "评论",
       path: "/comment",
       component: "./Comment",
-      icon: "CommentOutlined"
+      icon: "CommentOutlined",
+      access: "normalAdmin"
     },
     {
       name: "类型",
       path: "/type",
       component: "./Type",
-      icon: "ProductOutlined"
+      icon: "ProductOutlined",
+      access: "normalAdmin"
     },
     {
       path: "/login",

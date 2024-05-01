@@ -2,6 +2,19 @@ import Mock from "mockjs";
 import { omit } from "../src/utils/property";
 import { generateRandomColor, resSuccess, resError } from "../src/utils/tools";
 
+const admins = [
+  {
+    id: 51,
+    account: "admin",
+    password: "123456",
+    username: "Jimmy",
+    nickName: "Jimmy",
+    gender: 0,
+    role: 1,
+    enable: 1
+  }
+];
+
 const adminList = Mock.mock({
   "list|50": [
     {
@@ -14,19 +27,17 @@ const adminList = Mock.mock({
       "gender|0-1": 0,
       "role|1-3": 1,
       "enable|0-1": 0
-    },
-    {
-      id: 51,
-      account: "admin",
-      password: "123456",
-      username: "Jimmy",
-      nickName: "Jimmy",
-      gender: 0,
-      role: 1,
-      enable: 1
     }
   ]
 });
+
+admins.forEach((admin) => {
+  adminList.list.push(admin);
+});
+
+const tokenMap = {
+  admin: ""
+};
 
 let captchaText = "";
 
@@ -106,9 +117,23 @@ export default {
     if (targetAdmin.password !== password) return resError(res, "密码错误");
     if (captcha !== captchaText) return resError(res, "验证码错误");
     if (!targetAdmin.enable) return resError(res, "账号已被禁用");
-
+    tokenMap[account] = Mock.Random.guid();
     resSuccess(res, {
-      token: Mock.Random.guid()
+      token: tokenMap[account]
     });
+  },
+  "GET /api/admin/info": (req, res) => {
+    const token = req.headers.authorization;
+    if (!token) return resError(res, "请先登录");
+    const targetAdmin = adminList.list.find((admin) => tokenMap[admin.account] === token);
+    if (!targetAdmin) return resError(res, "登录信息已过期");
+    resSuccess(res, targetAdmin);
+  },
+  "POST /api/admin/logout": (req, res) => {
+    const { id: adminId } = req.body;
+    const targetAdmin = adminList.list.find((admin) => admin.id === adminId);
+    if (!targetAdmin) return resError(res, "账号不存在");
+    delete tokenMap[targetAdmin.account];
+    resSuccess(res, null);
   }
 };

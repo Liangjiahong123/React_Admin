@@ -3,7 +3,8 @@ import {
   deleteAdminByIdApi,
   editAdminsApi,
   addAdminApi,
-  loginApi
+  loginApi,
+  getAdminInfoApi
 } from "@/services/admin";
 
 export default {
@@ -11,7 +12,8 @@ export default {
   state: {
     adminList: [],
     adminTotal: 0,
-    token: localStorage.getItem("token") || ""
+    token: localStorage.getItem("token") || "",
+    adminInfo: null
   },
   reducers: {
     setAdminList(state, { payload }) {
@@ -52,6 +54,11 @@ export default {
     setToken(state, { payload }) {
       localStorage.setItem("token", payload);
       return { ...state, token: payload };
+    },
+
+    setAdminInfo(state, { payload }) {
+      localStorage.setItem("adminInfo", JSON.stringify(payload));
+      return { ...state, adminInfo: payload };
     }
   },
   effects: {
@@ -95,11 +102,19 @@ export default {
       return result;
     },
 
+    // 获取用户信息
+    *fetchGetAdminInfo({ payload }, { call, put }) {
+      const { data } = yield call(getAdminInfoApi);
+      if (!data) return;
+      yield put({ type: "setAdminInfo", payload: data });
+    },
+
     // 登录
     *fetchLogin({ payload }, { call, put }) {
       const result = yield call(loginApi, payload);
       if (result.errorCode === 0) {
         yield put({ type: "setToken", payload: result?.data?.token || "" });
+        yield put({ type: "fetchGetAdminInfo" });
       }
       return result;
     }

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Form, Input, Button, Checkbox, Row, Col, App } from "antd";
-import { useDispatch, useNavigate } from "@umijs/max";
+import { useDispatch } from "@umijs/max";
 import { UserOutlined, LockOutlined, BarcodeOutlined } from "@ant-design/icons";
 import ReactCanvasNest from "react-canvas-nest";
 import { getCaptchaApi } from "services/admin";
@@ -9,7 +9,6 @@ import styles from "./css/login.less";
 const Login = () => {
   const { message } = App.useApp();
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const [userInfo, setUserInfo] = useState({
     account: "",
     password: "",
@@ -38,8 +37,9 @@ const Login = () => {
   async function handleSubmitForm() {
     const { errorCode, errMsg } = await dispatch({ type: "admin/fetchLogin", payload: userInfo });
     if (errorCode !== 0) return message.error(errMsg);
+
     message.success("登录成功", 1, () => {
-      navigate("/home", { replace: true });
+      location.replace("/home");
     });
   }
   return (
@@ -47,7 +47,7 @@ const Login = () => {
       <ReactCanvasNest config={{ pointColor: "255,100,50", count: 60, follow: true }} />
       <div className={styles["login-container"]}>
         <div className={styles["form-box"]}>
-          <h1 className={styles["title"]}>coderStation 后台管理系统</h1>
+          <h1 className={styles["title"]}>React+umi 后台管理系统</h1>
           <Form
             name="login"
             className="login-form"

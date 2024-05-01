@@ -36,3 +36,13 @@ export function getCaptchaApi() {
 export function loginApi(loginInfo) {
   return request("/api/login", { method: "POST", data: loginInfo });
 }
+
+// 获取管理员信息
+export function getAdminInfoApi() {
+  return request("/api/admin/info", { method: "GET" });
+}
+
+// 退出
+export function logoutApi() {
+  return request("/api/admin/logout", { method: "POST" });
+}
